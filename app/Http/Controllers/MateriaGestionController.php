@@ -102,8 +102,6 @@ class MateriaGestionController extends Controller
         ->where('gestion.id', $request->id_gestion)
         ->get();
 
-        //dd($request->id_materia);
-
         return $materias_seleccionadas;
     }
 

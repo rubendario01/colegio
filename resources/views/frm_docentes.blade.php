@@ -120,48 +120,50 @@
   </div>
 
   <script>
-        $('#nuevo_docente').on('click', function(){
-            console.log('click');
-            $("#codigo").val('');
-            $("#nombres").val('');
-            $("#apellidos").val('');
-            $("#sexo").val('Masculino');
-            $("#direccion").val('');
-            $("#fecha_nac").val('');
-            $("#telefono").val('');
-            $("#profesion").val('');
-            $("#id").val(0);
-            $("#modal_guardar").modal("show");
-            $("#btn_guardar").html("Guardar");
-        })
-
-        $('.editando').on('click', function(){
-            // Obtener la fila padre del enlace de edición
-            var fila = $(this).closest('.fila-docente');
-
-            // Obtener los valores de cada columna de la fila
-            var id = fila.find('td:eq(0)').text();
-            var codigo = fila.find('td:eq(1)').text();
-            var nombres = fila.find('td:eq(2)').text();
-            var apellidos = fila.find('td:eq(3)').text();
-            var sexo = fila.find('td:eq(4)').text();
-            var direccion = fila.find('td:eq(5)').text();
-            var fecha_nac = fila.find('td:eq(6)').text();
-            var telefono = fila.find('td:eq(7)').text();
-            var profesion = fila.find('td:eq(8)').text();
-
-            console.log('click');
-            $("#codigo").val(codigo);
-            $("#nombres").val(nombres);
-            $("#apellidos").val(apellidos);
-            $("#sexo").val(sexo);
-            $("#direccion").val(direccion);
-            $("#fecha_nac").val(fecha_nac);
-            $("#telefono").val(telefono);
-            $("#profesion").val(profesion);
-            $("#id").val(id);
-            $("#modal_guardar").modal("show");
-            $("#btn_guardar").html("Modificar");
+        $(document).ready(function(){
+          $('#nuevo_docente').on('click', function(){
+              console.log('click');
+              $("#codigo").val('');
+              $("#nombres").val('');
+              $("#apellidos").val('');
+              $("#sexo").val('Masculino');
+              $("#direccion").val('');
+              $("#fecha_nac").val('');
+              $("#telefono").val('');
+              $("#profesion").val('');
+              $("#id").val(0);
+              $("#modal_guardar").modal("show");
+              $("#btn_guardar").html("Guardar");
+          })
+  
+          $('.editando').on('click', function(){
+              // Obtener la fila padre del enlace de edición
+              var fila = $(this).closest('.fila-docente');
+  
+              // Obtener los valores de cada columna de la fila
+              var id = fila.find('td:eq(0)').text();
+              var codigo = fila.find('td:eq(1)').text();
+              var nombres = fila.find('td:eq(2)').text();
+              var apellidos = fila.find('td:eq(3)').text();
+              var sexo = fila.find('td:eq(4)').text();
+              var direccion = fila.find('td:eq(5)').text();
+              var fecha_nac = fila.find('td:eq(6)').text();
+              var telefono = fila.find('td:eq(7)').text();
+              var profesion = fila.find('td:eq(8)').text();
+  
+              console.log('click');
+              $("#codigo").val(codigo);
+              $("#nombres").val(nombres);
+              $("#apellidos").val(apellidos);
+              $("#sexo").val(sexo);
+              $("#direccion").val(direccion);
+              $("#fecha_nac").val(fecha_nac);
+              $("#telefono").val(telefono);
+              $("#profesion").val(profesion);
+              $("#id").val(id);
+              $("#modal_guardar").modal("show");
+              $("#btn_guardar").html("Modificar");
+          })
         })
   </script>
 @endsection

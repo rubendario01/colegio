@@ -95,6 +95,10 @@ Route::get('/inscripcion2', [App\Http\Controllers\InscripcionController::class, 
 Route::get('/get_inscripciones', [App\Http\Controllers\InscripcionController::class, 'getInscripciones'])->middleware('auth');
 Route::get('/get_alumnos', [App\Http\Controllers\InscripcionController::class, 'getAlumnos'])->middleware('auth');
 Route::get('/get_cursogestiones', [App\Http\Controllers\InscripcionController::class, 'getCursogestiones'])->middleware('auth');
+Route::post('/inscripcion/activar', [App\Http\Controllers\InscripcionController::class, 'activar'])->middleware('auth');
+Route::post('/inscripcion/desactivar', [App\Http\Controllers\InscripcionController::class, 'desactivar'])->middleware('auth');
+
+
 
 
 

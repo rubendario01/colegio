@@ -83,33 +83,35 @@
 </div>
 
 <script>
-    $('#nuevo_horario').on('click', function(){
-        console.log('click');
-        $("#dia").val('');
-        $("#hora_inicio").val('');
-        $("#hora_fin").val('');
-        $("#id").val(0);
-        $("#modal_guardar").modal("show");
-        $("#btn_guardar").html("Guardar");
-    })
-
-    $('.editando').on('click', function(){
-        // Obtener la fila padre del enlace de edición
-        var fila = $(this).closest('.fila-horario');
-
-        // Obtener los valores de cada columna de la fila
-        var id = fila.find('td:eq(0)').text();
-        var dia = fila.find('td:eq(1)').text();
-        var horaInicio = fila.find('td:eq(2)').text();
-        var horaFin = fila.find('td:eq(3)').text();
-
-        console.log('click');
-        $("#dia").val(dia);
-        $("#hora_inicio").val(horaInicio);
-        $("#hora_fin").val(horaFin);
-        $("#id").val(id);
-        $("#modal_guardar").modal("show");
-        $("#btn_guardar").html("Modificar");
+    $(document).ready(function(){
+        $('#nuevo_horario').on('click', function(){
+            console.log('click');
+            $("#dia").val('');
+            $("#hora_inicio").val('');
+            $("#hora_fin").val('');
+            $("#id").val(0);
+            $("#modal_guardar").modal("show");
+            $("#btn_guardar").html("Guardar");
+        })
+    
+        $('.editando').on('click', function(){
+            // Obtener la fila padre del enlace de edición
+            var fila = $(this).closest('.fila-horario');
+    
+            // Obtener los valores de cada columna de la fila
+            var id = fila.find('td:eq(0)').text();
+            var dia = fila.find('td:eq(1)').text();
+            var horaInicio = fila.find('td:eq(2)').text();
+            var horaFin = fila.find('td:eq(3)').text();
+    
+            console.log('click');
+            $("#dia").val(dia);
+            $("#hora_inicio").val(horaInicio);
+            $("#hora_fin").val(horaFin);
+            $("#id").val(id);
+            $("#modal_guardar").modal("show");
+            $("#btn_guardar").html("Modificar");
+        })
     })
 </script>
 @endsection

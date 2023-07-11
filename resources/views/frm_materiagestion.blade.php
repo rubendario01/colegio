@@ -344,11 +344,31 @@
             // verMaterias();
         });
 
+        $('.editando').click(function(e) {
+            e.preventDefault();
 
-
+            // Obtener la fila padre del enlace clicado
+            var fila = $(this).closest('.fila-materia');
+            // Obtener los datos de la fila
+            var id = fila.find('td:eq(0)').text();
+            var nombre = fila.find('td:eq(1)').text();
+            if(existeAgregadoMateriaEditar(id)){
+                alert('el curso ya esta agregado');
+            }else{
+                // Crear un objeto con los datos de la fila seleccionada
+                var datosFila = {
+                id: id,
+                nombre: nombre,
+                
+                };
+                // Agregar los datos al objeto de filas seleccionadas
+                datosSeleccionados_editar.push(datosFila);
+    
+                // Actualizar la tabla con los datos seleccionados
+                actualizarTablaSeleccionados_editar();
+            }
     });
 
-    //*****************************************************
     $('.guardando').click(function(e) {
             e.preventDefault();
 
@@ -374,30 +394,12 @@
             }
     });
 
-    $('.editando').click(function(e) {
-            e.preventDefault();
-
-            // Obtener la fila padre del enlace clicado
-            var fila = $(this).closest('.fila-materia');
-            // Obtener los datos de la fila
-            var id = fila.find('td:eq(0)').text();
-            var nombre = fila.find('td:eq(1)').text();
-            if(existeAgregadoMateriaEditar(id)){
-                alert('el curso ya esta agregado');
-            }else{
-                // Crear un objeto con los datos de la fila seleccionada
-                var datosFila = {
-                id: id,
-                nombre: nombre,
-                
-                };
-                // Agregar los datos al objeto de filas seleccionadas
-                datosSeleccionados_editar.push(datosFila);
-    
-                // Actualizar la tabla con los datos seleccionados
-                actualizarTablaSeleccionados_editar();
-            }
     });
+
+    //*****************************************************
+    
+
+    
 
         // Función para actualizar la tabla de datos seleccionados
         function actualizarTablaSeleccionados() {

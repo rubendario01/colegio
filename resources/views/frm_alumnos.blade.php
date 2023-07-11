@@ -121,46 +121,49 @@
 </div>
 
 <script>
-    $('#nuevo_alumno').on('click', function () {
-        console.log('click');
-        $("#ci_alumno").val('');
-        $("#nombre").val('');
-        $("#apellidos").val('');
-        $("#rude").val('');
-        $("#fecha_nac").val('');
-        $("#sexo").val('Masculino');
-        $("#direccion").val('');
-        $("#id").val(0);
-        $("#modal_guardar").modal("show");
-        $("#btn_guardar").html("Guardar");
-    })
+    $(document).ready(function(){
+        $('#nuevo_alumno').on('click', function () {
+            console.log('click');
+            $("#ci_alumno").val('');
+            $("#nombre").val('');
+            $("#apellidos").val('');
+            $("#rude").val('');
+            $("#fecha_nac").val('');
+            $("#sexo").val('Masculino');
+            $("#direccion").val('');
+            $("#id").val(0);
+            $("#modal_guardar").modal("show");
+            $("#btn_guardar").html("Guardar");
+        })
+    
+        $('.editando').on('click', function () {
+            // Obtener la fila padre del enlace de edición
+            var fila = $(this).closest('.fila-alumno');
+    
+            // Obtener los valores de cada columna de la fila
+            var id = fila.find('td:eq(0)').text();
+            var ci_alumno = fila.find('td:eq(1)').text();
+            var nombre = fila.find('td:eq(2)').text();
+            var apellidos = fila.find('td:eq(3)').text();
+            var rude = fila.find('td:eq(4)').text();
+            var fecha_nac = fila.find('td:eq(5)').text();
+            var sexo = fila.find('td:eq(6)').text();
+            var direccion = fila.find('td:eq(7)').text();
+    
+            console.log('click');
+            $("#ci_alumno").val(ci_alumno);
+            $("#nombre").val(nombre);
+            $("#apellidos").val(apellidos);
+            $("#rude").val(rude);
+            $("#fecha_nac").val(fecha_nac);
+            $("#sexo").val(sexo);
+            $("#direccion").val(direccion);
+            $("#id").val(id);
+            $("#modal_guardar").modal("show");
+            $("#btn_guardar").html("Modificar");
+        })
 
-    $('.editando').on('click', function () {
-        // Obtener la fila padre del enlace de edición
-        var fila = $(this).closest('.fila-alumno');
-
-        // Obtener los valores de cada columna de la fila
-        var id = fila.find('td:eq(0)').text();
-        var ci_alumno = fila.find('td:eq(1)').text();
-        var nombre = fila.find('td:eq(2)').text();
-        var apellidos = fila.find('td:eq(3)').text();
-        var rude = fila.find('td:eq(4)').text();
-        var fecha_nac = fila.find('td:eq(5)').text();
-        var sexo = fila.find('td:eq(6)').text();
-        var direccion = fila.find('td:eq(7)').text();
-
-        console.log('click');
-        $("#ci_alumno").val(ci_alumno);
-        $("#nombre").val(nombre);
-        $("#apellidos").val(apellidos);
-        $("#rude").val(rude);
-        $("#fecha_nac").val(fecha_nac);
-        $("#sexo").val(sexo);
-        $("#direccion").val(direccion);
-        $("#id").val(id);
-        $("#modal_guardar").modal("show");
-        $("#btn_guardar").html("Modificar");
-    })
+    });
 
 </script>
 @endsection

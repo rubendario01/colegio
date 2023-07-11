@@ -84,7 +84,8 @@
   </div>
 
   <script>
-        $('#nueva_gestion').on('click', function(){
+        $(document).ready(function(){
+          $('#nueva_gestion').on('click', function(){
             console.log('click');
             $("#anio").val('');
             $("#fecha_inicio").val('');
@@ -112,5 +113,7 @@
             $("#modal_guardar").modal("show");
             $("#btn_guardar").html("Modificar");
         })
+        })
+        
   </script>
 @endsection

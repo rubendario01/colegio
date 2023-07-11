@@ -116,8 +116,9 @@ class InscripcionController extends Controller
         ->join('curso', 'curso.id', '=', 'cursogestion.id_curso')
         ->select('alumno.ci_alumno', 'alumno.id', 'alumno.rude', 'alumno.nombre', 'alumno.apellidos'
         , 'curso.grado', 'curso.turno', 'inscripcion.id as id_inscripcion', 'inscripcion.id_alumno', 'inscripcion.id_curso',
-        'inscripcion.id_gestion', 'gestion.anio')
+        'inscripcion.id_gestion', 'gestion.anio', 'inscripcion.estado')
         ->get();
+
         return $alumnos_inscritos;
     }
 
@@ -146,5 +147,19 @@ class InscripcionController extends Controller
 
         return $cursogestiones;
         
+    }
+
+    public function activar(Request $request){
+        DB::table('inscripcion')->where('id', $request->id_inscripcion)
+        ->update([
+            'estado'=>0
+        ]);
+    }
+
+    public function desactivar(Request $request){
+        DB::table('inscripcion')->where('id', $request->id_inscripcion)
+        ->update([
+            'estado'=>1
+        ]);
     }
 }

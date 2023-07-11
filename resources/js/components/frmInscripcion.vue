@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="table-container">
                     <div class="mb-3 mt-3">
-                        <button id="nueva_inscripcion" class="btn btn-primary text-white"><i
+                        <button @click="nuevaInscripcion()" id="nueva_inscripcion" class="btn btn-primary text-white"><i
                                 class="fas fa-plus text-white"></i>
                             Nuevo</button>
                     </div>
@@ -22,31 +22,26 @@
                                 <th>Rude</th>
                                 <th>Grado</th>
                                 <th>Turno</th>
+                                <th>Estado</th>
                                 <th>Opciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="item in itemsInscripciones" :key="item.id_inscripcion">
+                                <td>{{  item.id_inscripcion}}</td>
+                                <td>{{  item.ci_alumno}}</td>
+                                <td>{{  item.nombre}}</td>
+                                <td>{{  item.apellidos}}</td>
+                                <td>{{  item.rude}}</td>
+                                <td>{{  item.grado}}</td>
+                                 <td>{{  item.turno}}</td>
                                 <td>
-                                    <option>{{  item.id_inscripcion}}</option>
-                                </td>
-                                <td>
-                                    <option>{{  item.ci_alumno}}</option>
-                                </td>
-                                <td>
-                                    <option>{{  item.nombre}}</option>
-                                </td>
-                                <td>
-                                    <option>{{  item.apellidos}}</option>
-                                </td>
-                                <td>
-                                    <option>{{  item.rude}}</option>
-                                </td>
-                                <td>
-                                    <option>{{  item.grado}}</option>
-                                </td>
-                                <td>
-                                    <option>{{  item.turno}}</option>
+                                    <template v-if="item.estado==0">
+                                        <span class="badge bg-success" style="color:White;">Activo</span>
+                                    </template>
+                                    <template v-else-if="item.estado==1">
+                                        <span class="badge bg-danger" style="color:White;">Inactivo</span>
+                                    </template>
                                 </td>
                                 <td>
                                     <div class="dropdown">
@@ -56,8 +51,8 @@
                                         </a>
 
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                            <li><a class="dropdown-item" href="#">Activar</a></li>
-                                            <li><a class="dropdown-item editando" href="#">Desactivar</a></li>
+                                            <li v-if="item.estado==1"><a @click="activar(item)" class="dropdown-item" href="#">Activar</a></li>
+                                            <li v-if="item.estado==0"><a @click="desactivar(item)" class="dropdown-item editando" href="#">Desactivar</a></li>
                                         </ul>
                                     </div>
                                 </td>
@@ -85,46 +80,60 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <label for="nombre" class="form-label">Nombre:</label>
-                                    <select id="id_alumno" v-model="datos.id_alumno" class="form-control choices-single"
-                                        style="font-size:2 rem !important">
-                                        <option v-bind:value="item.id"
-                                            v-for="item in itemsAlumnos" :key="item.id">
-                                            {{ item.descripcion }}
-                                        </option>
-                                
-                                    </select>
-                                    <input type="text" v-model="datos.id_alumno" class="form-control" placeholder="Buscar..." @input="handleInput()">
-                                    <div v-if="showResults" class="position-absolute bg-white border rounded p-2 shadow" style="top: 100%; left: 0; right: 0; z-index: 100">
-                                        <ul class="list-group">
-                                            <li v-for="item in filteredItems" :key="item.id" class="list-group-item" @click="selectItem(item)">{{ item.nombre }}</li>
-                                        </ul>
-                                    </div>
+                                    
+                                    <section class="dropdown-wrapper form-control bg-disabled">
+                                        <div @click="isVisibleAlumno = !isVisibleAlumno" class="selected-item">
+                                            <span v-if="datos_alumno.nombre_completo==''">Seleccione un alumno</span>
+                                            <span  v-else>{{datos_alumno.nombre_completo }} </span>
+                                            <svg :class="isVisibleAlumno ? 'dropdown' : ''" class="drop-down-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 10.828l-4.95 4.95-1.414-1.414L12 8l6.364 6.364-1.414 1.414z"/></svg>
+                                        </div>
+                                        <div :class="isVisibleAlumno  ? 'visible' : 'invisible'" class="dropdown-popover" style="position: absolute; z-index: 9999;">
+                                            <input type="text" class="form-control" placeholder="Buscar alumno.."  v-model="datos_alumno.buscador" aria-label="Buscar alumno..">
+                                            <div class="text-center"><span v-if="filteredItemsAlumnos.length === 0">No existe el alumno</span></div>
+                                            <div class="options">
+                                                <ul>
+                                                    <li @click="selectItem(alumno)" v-for="(alumno, index) in filteredItemsAlumnos" :key="index">{{alumno.nombre +' '+alumno.apellidos}}</li>
+                                                </ul>
+                                            </div>
+                                        </div> 
+                                    </section>
                                     
                                 </div>
                                 <div class="col-md-4">
                                     <label for="ci_alumno" class="form-label">CI:</label>
-                                    <input type="text" class="form-control" id="ci_alumno" name="ci_alumno"
-                                        placeholder="Ingrese el CI del alumno">
+                                    <input v-model="datos_alumno.ci_alumno" type="text" class="form-control" id="ci_alumno" name="ci_alumno" placeholder="Ingrese el CI del alumno">
                                 </div>
 
                                 <div class="col-md-4">
                                     <label for="rude" class="form-label">Rude:</label>
-                                    <input type="text" class="form-control" id="rude" name="rude"
+                                    <input v-model="datos_alumno.rude" type="text" class="form-control" id="rude" name="rude"
                                         placeholder="Ingrese el RUDE del alumno">
                                 </div>
                             </div>
-                            <!-- <div class="row">
+                            <div class="row">
                                 <div class="col-md-12">
-                                    <label for="nombre" class="form-label">Curso gestion:</label>
-                                    <select id="id_cursogestion" class="form-control choices-single"
-                                        style="font-size:2 rem !important" v-for = "item in itemsCursogestiones" :key="item.id_curso">
+                                    <label for="nombre" class="form-label">Curso - Gestion:</label>
+                                    
+                                  
 
-                       
-                                        <option> {{ item.anio + ' '+ item.grado}}</option>
-                           
-                                    </select>
+                                    <section class="dropdown-wrapper form-control bg-disabled">
+                                        <div @click="isVisible = !isVisible" class="selected-item">
+                                            <span v-if="curso_gestion.curso_gestion_select==''">Seleccione un curso_gestion</span>
+                                            <span  v-else>{{curso_gestion.curso_gestion_select }} </span>
+                                            <svg :class="isVisible ? 'dropdown' : ''" class="drop-down-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 10.828l-4.95 4.95-1.414-1.414L12 8l6.364 6.364-1.414 1.414z"/></svg>
+                                        </div>
+                                        <div :class="isVisible  ? 'visible' : 'invisible'" class="dropdown-popover" style="position: absolute; z-index: 9999;">
+                                            <input type="text" class="form-control" placeholder="Buscar curso.."  v-model="curso_gestion.curso_x_gestion" aria-label="Buscar curso..">
+                                            <div class="text-center"><span v-if="filteredItemsCursoGestion.length === 0">No existe el curso</span></div>
+                                            <div class="options">
+                                                <ul>
+                                                    <li @click="selectItemCursoGestion(cursogestion)" v-for="(cursogestion, index) in filteredItemsCursoGestion" :key="index">{{cursogestion.grado +' '+cursogestion.anio}}</li>
+                                                </ul>
+                                            </div>
+                                        </div> 
+                                    </section>
                                 </div>
-                            </div> -->
+                            </div> 
                             <div class="row mt-3">
                                 <div class="col-md-12">
                                     <div class="table-container">
@@ -139,7 +148,11 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-
+                                                <tr v-for="item in itemsMateriasCursogestiones" :key="item.id_materia">
+                                                    <th>{{ item.id_materia }}</th>
+                                                    <th>{{ item.nombre }}</th>
+                                                    
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -148,7 +161,7 @@
 
                         </div>
                         <div class="modal-footer">
-                            <a id="btn_guardar" class="btn btn-primary">Guardar</a>
+                            <a @click="guardar()" id="btn_guardar" class="btn btn-primary">Guardar</a>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         </div>
                     </div>
@@ -163,6 +176,7 @@
     import Choices from 'choices.js';
     $(document).ready(function(){
         $(document).on('click', '#nueva_inscripcion', function(){
+            
             $('#modal_guardar').modal('show');
             
         });
@@ -173,17 +187,43 @@
                 itemsInscripciones: [],
                 itemsAlumnos: [],
                 itemsCursogestiones: [],
-                datos:{
+
+                itemsMateriasCursogestiones: [],
+                datos_alumno:{
                     id_alumno:'',
+                    nombre_completo:'',
+                    rude:'',
+                    ci_alumno:'',
+                    buscador:'',
                 },
-                showResults : false
+                curso_gestion:{
+                    curso_x_gestion:'',
+                    id_gestion:'',
+                    id_curso:'',
+                    curso_gestion_select:'',
+               
+                },
+                datos_inscripcion:{
+                    id_gestion:0,
+                    id_curso:0,
+                    id_alumno:0,
+                    id_inscripcion:0,
+                },
+                isVisible:false,
+                isVisibleAlumno:false,
+                showResults : false,
+                showResultsCursoGestion : false
                 
             };
         },
         computed:{
-            filteredItems() {
-            const searchTermLower = this.datos.id_alumno.toLowerCase();
+            filteredItemsAlumnos() {
+            const searchTermLower = this.datos_alumno.buscador.toLowerCase();
             return this.itemsAlumnos.filter(item => item.nombre.toLowerCase().includes(searchTermLower));
+            },
+            filteredItemsCursoGestion() {
+            const searchTermLower = this.curso_gestion.curso_x_gestion.toLowerCase();
+            return this.itemsCursogestiones.filter(item => item.grado.toLowerCase().includes(searchTermLower));
             },
         },
         mounted() {
@@ -197,6 +237,15 @@
         },
 
         methods: {
+            nuevaInscripcion(){
+                this.datos_alumno.id_alumno=0;
+                this.datos_alumno.nombre_completo='';
+                this.datos_alumno.ci_alumno='';
+                this.datos_alumno.rude='';
+            },
+            toggleResults() {
+                this.showResultsCursoGestion = !this.showResultsCursoGestion;
+            },
             getInscripciones() {
                 let url = '/get_inscripciones';
                 let me = this;
@@ -209,8 +258,11 @@
                         console.log(error);
                     })
             },
-            handleInput() {
-                this.showResults = this.searchTerm !== '';
+            buscandoAlumno() {
+                this.showResults = this.datos_alumno.nombre_completo !== '';
+            },
+            buscandoCursogestion() {
+                this.showResultsCursoGestion = this.curso_gestion.curso_x_gestion !== '';
             },
             getAlumnos(){
                 let url = '/get_alumnos';
@@ -231,18 +283,230 @@
                 let me = this;
                 axios.get(url).then(function (response) {
                         me.itemsCursogestiones = response.data;
-                        //new Choices(document.querySelector("#id_cursogestion"));
+                      
                         console.log(response);
                     })
                     .catch(function (error) {
                         console.log(error);
                     })
             },
+
+            getMateriasCursoGestion(id_curso, id_gestion){
+                let url='/materiagestion/ver?id_curso='+id_curso+'&id_gestion='+id_gestion;
+                let me=this;
+                axios.get(url)
+                .then(function(response){
+                    console.log(response);
+                    me.itemsMateriasCursogestiones=response.data;
+                })
+                .catch(function(error){
+                    console.log(error)
+                })
+            },
             selectItem(item) {
-                this.datos.id_alumno = item.nombre;
-                this.showResults = false;
-                },
+                    this.datos_alumno.nombre_completo = item.nombre+' '+item.apellidos;
+                    this.datos_alumno.id_alumno = item.id;
+                    this.datos_alumno.ci_alumno = item.ci_alumno;
+                    this.datos_alumno.rude = item.rude;
+                    console.log(this.datos_alumno.nombre_completo, this.datos_alumno.id_alumno);
+                    this.showResults = false;
+                    this.isVisibleAlumno= false;
+                    this.datos_inscripcion.id_alumno=this.datos_alumno.id_alumno;
+
+            },
+            
+            selectItemCursoGestion(item) {
+                    //this.curso_gestion.curso_x_gestion = item.grado +' '+item.anio;
+                    this.curso_gestion.id_gestion = item.id_gestion;
+                    this.curso_gestion.id_curso = item.id_curso;
+                    this.curso_gestion.curso_gestion_select= item.grado +' '+item.anio;
+
+                    console.log(this.curso_gestion.curso_x_gestion, this.curso_gestion.id_gestion, this.curso_gestion.id_curso);
+                    this.showResultsCursoGestion = false;
+                    this.isVisible= false;
+                    this.getMateriasCursoGestion(this.curso_gestion.id_curso, this.curso_gestion.id_gestion);
+                    this.datos_inscripcion.id_curso=this.curso_gestion.id_curso;
+                    this.datos_inscripcion.id_gestion=this.curso_gestion.id_gestion;
+
+
+            },
+
+            async guardar(){
+                let url = "/inscripcion/guardar";
+                let me=this;
+                await axios.post(url, me.datos_inscripcion)
+                .then(function(response){
+                    console.log(response);
+                    $('#modal_guardar').modal('hide');
+                    alert("guardado correctamente");
+                    me.getInscripciones();
+                })
+                .catch(function (error){
+                    console.log(error);
+                })
+            },
+
+            async activar(inscripcion){
+                let url = "/inscripcion/activar";
+                let me=this;
+                me.datos_inscripcion.id_inscripcion=inscripcion.id_inscripcion;
+                await axios.post(url, me.datos_inscripcion)
+                .then(function(response){
+                    console.log(response);
+                 
+                    me.getInscripciones();
+                    //alert("activado correctamente");
+                })
+                .catch(function (error){
+                    console.log(error);
+                })
+            },
+
+            async desactivar(inscripcion){
+                let url = "/inscripcion/desactivar";
+                let me=this;
+                me.datos_inscripcion.id_inscripcion=inscripcion.id_inscripcion;
+                await axios.post(url, me.datos_inscripcion)
+                .then(function(response){
+                    console.log(response);
+             
+                    me.getInscripciones();
+                    //alert("desactivado correctamente");
+                })
+                .catch(function (error){
+                    console.log(error);
+                })
             }
+        }
     }
 
 </script>
+
+<style>
+.search-container {
+  position: relative;
+}
+
+ul.list-group {
+  position: absolute;
+  z-index: 1;
+  background-color: white;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+ul.list-group li {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+ul.list-group li:hover {
+  background-color: #f2f2f2;
+}
+
+span.toggle-results {
+  display: block;
+  text-align: center;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+.input-group-append {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+}
+
+
+
+.rotate-icon {
+  transform: rotate(180deg);
+}
+
+.dropdown-wrapper {
+  position: relative;
+}
+
+.dropdown-wrapper .selected-item {
+  height: 25px;
+  border-radius: 5px;
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dropdown-wrapper .selected-item .drop-down-icon {
+  transform: rotate(0deg);
+  transition: all 0.5s ease;
+}
+
+.dropdown-wrapper .selected-item .drop-down-icon.dropdown {
+  transform: rotate(180deg);
+}
+
+.dropdown-wrapper .dropdown-popover {
+  position: absolute;
+  border: 2px solid lightgray;
+  top: 46;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  max-width: 100%;
+  align-items: center;
+  padding: 10px;
+  visibility: hidden;
+  transition: all 0.35s linear;
+  max-height: 0px;
+  overflow: hidden;
+}
+
+.dropdown-wrapper .dropdown-popover.visible {
+  max-height: 450px;
+  visibility: visible;
+}
+
+.dropdown-wrapper .dropdown-popover input {
+  width: 100%;
+  height: 30px;
+  border: 2px solid lightgray;
+  font-size: 18px;
+  padding-left: 8px;
+}
+
+.dropdown-wrapper .dropdown-popover .options {
+  width: 100%;
+  padding-top: 12px;
+}
+
+.dropdown-wrapper .dropdown-popover .options ul {
+  list-style: none;
+  text-align: left;
+  padding-left: 2px;
+  max-height: 200px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.dropdown-wrapper .dropdown-popover .options li {
+  width: 100%;
+  border-bottom: 1px solid lightgray;
+  padding: 5px;
+  border: 1px solid lightgray;
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+.dropdown-wrapper .dropdown-popover .options li:hover {
+  background: #44536E;
+  color: #fff;
+  font-weight: bold;
+}
+</style>

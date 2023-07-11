@@ -72,27 +72,29 @@
   </div>
 
   <script>
-        $('#nueva_materia').on('click', function(){
-            console.log('click');
-            $("#nombre").val('');
-            $("#id").val(0);
-            $("#modal_guardar").modal("show");
-            $("#btn_guardar").html("Guardar");
-        })
-
-        $('.editando').on('click', function(){
-            // Obtener la fila padre del enlace de edición
-            var fila = $(this).closest('.fila-materia');
-
-            // Obtener los valores de cada columna de la fila
-            var id = fila.find('td:eq(0)').text();
-            var nombre = fila.find('td:eq(1)').text();
-
-            console.log('click');
-            $("#nombre").val(nombre);
-            $("#id").val(id);
-            $("#modal_guardar").modal("show");
-            $("#btn_guardar").html("Modificar");
-        })
+        $(document).ready(function(){
+          $('#nueva_materia').on('click', function(){
+              console.log('click');
+              $("#nombre").val('');
+              $("#id").val(0);
+              $("#modal_guardar").modal("show");
+              $("#btn_guardar").html("Guardar");
+          })
+  
+          $('.editando').on('click', function(){
+              // Obtener la fila padre del enlace de edición
+              var fila = $(this).closest('.fila-materia');
+  
+              // Obtener los valores de cada columna de la fila
+              var id = fila.find('td:eq(0)').text();
+              var nombre = fila.find('td:eq(1)').text();
+  
+              console.log('click');
+              $("#nombre").val(nombre);
+              $("#id").val(id);
+              $("#modal_guardar").modal("show");
+              $("#btn_guardar").html("Modificar");
+          })
+        });
   </script>
 @endsection

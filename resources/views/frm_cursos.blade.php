@@ -90,7 +90,8 @@
   </div>
 
   <script>
-        $('#nuevo_curso').on('click', function(){
+        $(document).ready(function(){
+          $('#nuevo_curso').on('click', function(){
             console.log('click');
             $("#grado").val('');
             $("#nivel").val('');
@@ -121,5 +122,7 @@
             $("#modal_guardar").modal("show");
             $("#btn_guardar").html("Modificar");
         })
+        })
+       
   </script>
 @endsection
