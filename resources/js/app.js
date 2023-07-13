@@ -17,8 +17,10 @@ const app = createApp({});
 
 import ExampleComponent from './components/ExampleComponent.vue';
 import frmInscripcion from './components/frmInscripcion.vue';
+import frmAula from './components/frmInscripcion.vue';
 app.component('example-component', ExampleComponent);
 app.component('frm-inscripcion', frmInscripcion);
+app.component('frm-aula', frmAula);
 
 /**
  * The following block of code may be used to automatically register your

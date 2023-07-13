@@ -23,10 +23,18 @@ class InscripcionController extends Controller
         'inscripcion.id_gestion', 'gestion.anio')
         ->get();
 
+        // $alumnos = DB::table('alumno')
+        //     ->select('id', 'ci_alumno', 'nombre', 'apellidos', 'rude', 'fecha_nac', 'sexo', 'direccion')
+        //     ->get();
+
         $alumnos = DB::table('alumno')
             ->select('id', 'ci_alumno', 'nombre', 'apellidos', 'rude', 'fecha_nac', 'sexo', 'direccion')
+            ->whereNotExists(function ($query) {
+                $query->select(DB::raw(1))
+                      ->from('inscripcion')
+                      ->whereRaw('inscripcion.alumno_id = alumno.id');
+            })
             ->get();
-
     
         $cursogestiones = DB::table('materiagestion')
         ->join('cursogestion',function($join){
@@ -123,10 +131,18 @@ class InscripcionController extends Controller
     }
 
     public function getAlumnos(){
+        // $alumnos = DB::table('alumno')
+        //     ->select('id', 'ci_alumno', 'nombre', 'apellidos', 'rude', 'fecha_nac', 'sexo', 'direccion')
+        //     ->get();
+
         $alumnos = DB::table('alumno')
             ->select('id', 'ci_alumno', 'nombre', 'apellidos', 'rude', 'fecha_nac', 'sexo', 'direccion')
+            ->whereNotExists(function ($query) {
+                $query->select(DB::raw(1))
+                      ->from('inscripcion')
+                      ->whereRaw('inscripcion.id_alumno = alumno.id');
+            })
             ->get();
-
         return $alumnos;
     }
 
