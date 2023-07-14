@@ -108,6 +108,10 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Inscripción2
                             </a>
+                            <a class="nav-link" href="/aula">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Aula
+                            </a>
                             @endif
                         </div>
                     </div>

@@ -98,6 +98,9 @@ Route::get('/get_cursogestiones', [App\Http\Controllers\InscripcionController::c
 Route::post('/inscripcion/activar', [App\Http\Controllers\InscripcionController::class, 'activar'])->middleware('auth');
 Route::post('/inscripcion/desactivar', [App\Http\Controllers\InscripcionController::class, 'desactivar'])->middleware('auth');
 
+// rutas aulas
+Route::get('/aula', [App\Http\Controllers\AulaController::class, 'index'])->middleware('auth')->name('aula');
+Route::get('/aula/gestiones', [App\Http\Controllers\AulaController::class, 'getGestiones'])->middleware('auth');
 
 
 
